@@ -31,6 +31,11 @@ router.post('/api/login', async (req, res, next) =>
         fn = results[0].name.first;
         ln = results[0].name.last;
     }
+    else
+    {
+        error = "Invalid username/password.";
+        res.status(200).json(ret);
+    }
 
     var ret = { firstName:fn, lastName:ln, error:'', message:"Welcome back, " + fn};
     res.status(200).json(ret);    
