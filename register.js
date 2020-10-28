@@ -1,21 +1,20 @@
 var express = require('express');
+var router = express.Router();
 var app = express();
 
 var mongo = require('mongodb');
 const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
-var assert = require('assert');
+//var assert = require('assert');
 
 const client = mongo.MongoClient(url, {useUnifiedTopology: true});
 client.connect();
 
-app.post('/api/register', async (req, res, next) =>
+router.post('/api/register', async (req, res, next) =>
 {
     // incoming: _id (username), password, name object string (first and last name)
     // outgoing: error
 
-    const { _id, password, firstName, lastName } = req.body;
-
-    const name = { firstName, lastName };
+    const { _id, password, name } = req.body;
 
     // Add user info & initialize number of sets to 0 (new user)
     const newUser = { _id:_id, password:password,  name:name, numsets:0 };
@@ -36,4 +35,4 @@ app.post('/api/register', async (req, res, next) =>
     
 });
 
-var app = express();
+module.exports = router;
