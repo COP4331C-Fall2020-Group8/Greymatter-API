@@ -14,14 +14,16 @@ router.post('/api/searchCard', async (req, res, next) =>
     // incoming: set_id, search
     // outgoing: results[], error
 
+    // returns set's cards compared to search
+
     var error = "";
 
-    const { set_id, search } = req.body;
+    const { set_id /*user_id*/ , search } = req.body;
 
     var _search = search.trim();
 
     const db = client.db();
-    const results = await db.collection('Cards').find({ set_id : set_id }).toArray();
+    const results = await db.collection('Cards').find({ set_id : set_id/*user_id : user_id*/ }).toArray();
 /*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
     if (results.length == 0) { 
         error = "No results from search.";
@@ -29,9 +31,9 @@ router.post('/api/searchCard', async (req, res, next) =>
 
     var _ret = [];
     for (var i = 0; i < results.length; i++) { 
-        //var name = results[i].name;
-        //var category = results[i].category;
-        if(results[i].card.front.includes(search) || results[i].card.back.includes(search))
+        var cardfront = results[i].card.front.toLowerCase();
+        var cardback = results[i].card.back.toLowerCase();
+        if(cardfront.includes(search.toLowerCase()) || cardback.includes(search.toLowerCase()))
             _ret.push(results[i]);
     }
 
