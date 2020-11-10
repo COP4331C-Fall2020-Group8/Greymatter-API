@@ -28,9 +28,9 @@ router.post('/api/searchSet', async (req, res, next) => {
 
     var _ret = [];
     for (var i = 0; i < results.length; i++) { 
-        //var name = results[i].name;
-        //var category = results[i].category;
-        if(results[i].name.includes(search) || results[i].category.includes(search))
+        var name = results[i].name.toLowerCase();
+        var category = results[i].category.toLowerCase();
+        if(name.includes(search.toLowerCase()) || category.includes(search.toLowerCase()))
             _ret.push(results[i]);
     }
 
