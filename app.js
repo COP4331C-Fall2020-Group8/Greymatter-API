@@ -12,6 +12,8 @@ var addCardRouter = require('./routes/addCard');
 var removeCardRouter = require('./routes/removeCard');
 var addSetRouter = require('./routes/addSet');
 var removeSetRouter = require('./routes/removeSet');
+var searchCardRouter = require('./routes/searchCard');
+var searchSetRouter = require('./routes/searchSet');
 
 var app = express();
 
@@ -33,6 +35,8 @@ app.use('/', addCardRouter);
 app.use('/', addSetRouter);
 app.use('/', removeCardRouter);
 app.use('/', removeSetRouter);
+app.use('/', searchCardRouter);
+app.use('/', searchSetRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
