@@ -16,10 +16,21 @@ router.post('/api/register', async (req, res, next) =>
 
     const { _id, password, name, email} = req.body;
 
+    var isVerified = false;
+
     // Add user info & initialize number of sets to 0 (new user)
     const newUser = { _id:_id, password:password,  name:name, numsets:0,
-                    email:email};
+                    email:email, isVerified:isVerified};
+
     var error = "";
+
+    if (_id == null || password == null || name == null || email == null)
+    {
+    
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: _id, password, name, email)";
+        res.status(400).json({ error:error });
+        return;
+    }
 
     try
     {
@@ -29,6 +40,8 @@ router.post('/api/register', async (req, res, next) =>
     catch(e)
     {
         error = e.toString();
+        res.status(500).json({ error:error });
+        return;
     }
 
     var ret = { error:error };

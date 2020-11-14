@@ -20,15 +20,49 @@ router.post('/api/addCard', async (req, res, next) =>
     // Add user info & initialize number of sets to 0 (new user)
     const newCard = { user_id:user_id,  set_id:set_id, card:card };
     var error = "";
+    var search = [];
+
+    if (user_id == null || set_id == null || card == null)
+    {
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: user_id, set_id, card)";
+        res.status(400).json({ error:error });
+        return;
+    }
 
     try
     {
         const db = client.db();
+        
+        // Find results
+        var tmp = await db.collection("Sets").find(
+        {"_id":mongo.ObjectID(set_id)}
+        ).forEach(function(row)
+        {
+            search.push(row.user_id);
+        })
+            
+        // If no matching ID was found
+        if (search.length == 0)
+        {
+            res.status(400).json( {error:"There is no such Set ID. (Invalid ID)"})
+            return;
+        }
+        
+        const updateNumber = db.collection('Sets').findOneAndUpdate(
+            { "_id":mongo.ObjectID(set_id)},
+            { $inc : { "num_cards" : 1 } }
+            );
+        
         const result = db.collection('Cards').insertOne(newCard);
+
+
+
     }
     catch(e)
     {
         error = e.toString();
+        res.status(500).json( {error:error});
+        return;
     }
 
     var ret = { error:error };

@@ -15,7 +15,15 @@ router.post('/api/login', async (req, res, next) =>
     // outgoing: firstName, lastName, error, message
 
     const { _id, password} = req.body;
-
+    
+    if (_id == null || password == null)
+    {
+    
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: _id, password)";
+        res.status(400).json({ error:error });
+        return;
+    }
+    
     // Add user info & initialize number of sets to 0 (new user)
     const newUser = { _id:_id, password:password };
     var error = "";
@@ -25,6 +33,7 @@ router.post('/api/login', async (req, res, next) =>
 
     var fn = "";
     var ln = "";
+
 
     if ( results.length > 0)
     {
