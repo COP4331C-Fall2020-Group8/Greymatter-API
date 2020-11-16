@@ -21,24 +21,31 @@ router.post('/api/searchCard', async (req, res, next) =>
     const { set_id /*user_id*/ , search } = req.body;
 
     var _search = search.trim();
-
-    const db = client.db();
-    const results = await db.collection('Cards').find({ set_id : set_id/*user_id : user_id*/ }).toArray();
-/*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
-    if (results.length == 0) { 
-        error = "No results from search.";
+    var status;
+    try {
+        const db = client.db();
+        const results = await db.collection('Cards').find({ set_id: set_id/*user_id : user_id*/ }).toArray();
+        /*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
+        if (results.length == 0) {
+            error = "No results from search.";
+            status = 400;
+        }
+        else { status = 200; }
+        var _ret = [];
+        for (var i = 0; i < results.length; i++) {
+            var cardfront = results[i].card.front.toLowerCase();
+            var cardback = results[i].card.back.toLowerCase();
+            if (cardfront.includes(search.toLowerCase()) || cardback.includes(search.toLowerCase()))
+                _ret.push(results[i]);
+        }
     }
-
-    var _ret = [];
-    for (var i = 0; i < results.length; i++) { 
-        var cardfront = results[i].card.front.toLowerCase();
-        var cardback = results[i].card.back.toLowerCase();
-        if(cardfront.includes(search.toLowerCase()) || cardback.includes(search.toLowerCase()))
-            _ret.push(results[i]);
+    catch (e) {
+        error = e.toString();
+        res.status(500).json({ error: error })
+        return;
     }
-
     var ret = { results: _ret, error: error };
-    res.status(200).json(ret);
+    res.status(status).json(ret);
 });
 
 module.exports = router;
