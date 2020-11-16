@@ -14,28 +14,34 @@ router.post('/api/searchSet', async (req, res, next) => {
     // outgoing: results[], error
 
     var error = "";
-
+    var status;
     const { user_id, search } = req.body;
 
     //var _search = search.trim();
-
-    const db = client.db();
-    const results = await db.collection('Sets').find({ user_id: user_id }).toArray();
-/*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
-    if (results.length == 0) { 
-        error = "No results from search.";
+    try {
+        const db = client.db();
+        const results = await db.collection('Sets').find({ user_id: user_id }).toArray();
+        /*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
+        if (results.length == 0) {
+            error = "No results from search.";
+            status = 400;
+        }
+        else { status = 200; }
+        var _ret = [];
+        for (var i = 0; i < results.length; i++) {
+            var name = results[i].name.toLowerCase();
+            var category = results[i].category.toLowerCase();
+            if (name.includes(search.toLowerCase()) || category.includes(search.toLowerCase()))
+                _ret.push(results[i]);
+        }
     }
-
-    var _ret = [];
-    for (var i = 0; i < results.length; i++) { 
-        var name = results[i].name.toLowerCase();
-        var category = results[i].category.toLowerCase();
-        if(name.includes(search.toLowerCase()) || category.includes(search.toLowerCase()))
-            _ret.push(results[i]);
+    catch (e) {
+        error = e.toString();
+        res.status(500).json({ error: error })
+        return;
     }
-
     var ret = { results: _ret, error: error };
-    res.status(200).json(ret);
+    res.status(status).json(ret);
 });
 
 module.exports = router;
