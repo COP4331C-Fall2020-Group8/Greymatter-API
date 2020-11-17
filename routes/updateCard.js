@@ -11,17 +11,17 @@ client.connect();
 
 router.post('/api/updateCard', async (req, res, next) =>
 {
-    // incoming: _id, front, back
+    // incoming: id, front, back
     // outgoing: error
 
     // has to take in card front and back regardless of whether it is being updated or not
 
     var error = "";
     var ObjectID = require('mongodb').ObjectID;
-    const { _id , front, back } = req.body;
+    const { id , front, back } = req.body;
 
     //var _search = search.trim();
-    var query = { "_id": ObjectID(_id) };
+    var query = { "_id": ObjectID(id) };
     var replacement = {
         $set: {
             "card": {
