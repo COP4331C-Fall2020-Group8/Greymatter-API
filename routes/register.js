@@ -14,20 +14,20 @@ router.post('/api/register', async (req, res, next) =>
     // incoming: _id (username), password, name object string (first and last name)
     // outgoing: error
 
-    const { _id, password, name, email} = req.body;
+    const { id, password, name, email} = req.body;
 
     var isVerified = false;
 
     // Add user info & initialize number of sets to 0 (new user)
-    const newUser = { _id:_id, password:password,  name:name, numsets:0,
+    const newUser = { _id:id, password:password,  name:name, numsets:0,
                     email:email, isVerified:isVerified};
 
     var error = "";
 
-    if (_id == null || password == null || name == null || email == null)
+    if (id == null || password == null || name == null || email == null)
     {
     
-        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: _id, password, name, email)";
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: id, password, name, email)";
         res.status(400).json({ error:error });
         return;
     }

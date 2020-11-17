@@ -14,22 +14,22 @@ router.post('/api/login', async (req, res, next) =>
     // incoming: _id (username), password
     // outgoing: firstName, lastName, error, message
 
-    const { _id, password} = req.body;
+    const { id, password} = req.body;
     
-    if (_id == null || password == null)
+    if (id == null || password == null)
     {
     
-        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: _id, password)";
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: id, password)";
         res.status(400).json({ error:error });
         return;
     }
     
     // Add user info & initialize number of sets to 0 (new user)
-    const newUser = { _id:_id, password:password };
+    const newUser = { _id:id, password:password };
     var error = "";
 
     const db = client.db();
-    const results = await db.collection("Users").find({ _id:_id, password:password }).toArray();
+    const results = await db.collection("Users").find({ _id:id, password:password }).toArray();
 
     var fn = "";
     var ln = "";
@@ -43,7 +43,7 @@ router.post('/api/login', async (req, res, next) =>
     else
     {
         error = "Invalid username/password.";
-        res.status(200).json(ret);
+        res.status(400).json(ret);
     }
 
     var ret = { firstName:fn, lastName:ln, error:'', message:"Welcome back, " + fn};
