@@ -11,16 +11,16 @@ client.connect();
 
 router.post('/api/updateSet', async (req, res, next) =>
 {
-    // incoming: _id, name, category
+    // incoming: id, name, category
     // outgoing: error
 
     // has to take in set name and category regardless of whether it is being updated or not
     var error = "";
     var ObjectID = require('mongodb').ObjectID;
-    const { _id , name, category } = req.body;
+    const { id , name, category } = req.body;
 
     //var _search = search.trim();
-    var query = { "_id": ObjectID(_id) };
+    var query = { "_id": ObjectID(id) };
     var replacement = {
         $set: {
             "name": name,
