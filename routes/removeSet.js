@@ -54,7 +54,7 @@ router.post('/api/removeSet', async (req, res, next) =>
         });
 
         // Remove one from num_sets
-        const updateNumber = db.collection('Users').findOneAndUpdate(
+        const updateNumber = db.collection('users').findOneAndUpdate(
             { "_id":user_id[0]},
             { $inc : { "num_sets" : -1 } }
             );

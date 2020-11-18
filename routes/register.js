@@ -1,52 +1,70 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
 
-var mongo = require('mongodb');
+var error = "";
+var errArray;
+
 const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
-//var assert = require('assert');
+const mongoose = require('mongoose');
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true});
 
-const client = mongo.MongoClient(url, {useUnifiedTopology: true});
-client.connect();
+const db = mongoose.connection;
 
-router.post('/api/register', async (req, res, next) =>
-{
-    // incoming: _id (username), password, name object string (first and last name)
-    // outgoing: error
+db.on('error', console.error.bind(console, 'connection:error: '));
 
-    const { id, password, name, email} = req.body;
-
-    var isVerified = false;
-
-    // Add user info & initialize number of sets to 0 (new user)
-    const newUser = { _id:id, password:password,  name:name, numsets:0,
-                    email:email, isVerified:isVerified};
-
-    var error = "";
-
-    if (id == null || password == null || name == null || email == null)
+db.once('open', function()
     {
+        const userSchema = new mongoose.Schema(
+            {
+                _id: String,
+                password: String,
+                name: Object,
+                num_sets: Number,
+                email: String,
+                isVerified: Boolean
+            });
+
+        console.log("Connection established.")
+        router.post('/api/register', async (req, res, next) =>
+        {
+            const { id, password, name, email } = req.body 
+
+            if (id == null || password == null || name == null || email == null)
+            {
+                error = "One or more needed fields doesn't exist. Review JSON input (Requires id, password, name, email)";
+                res.status(400).json({ error:error });
+                return;
+            }
+            
+            const User = mongoose.model('Users', userSchema);
+            
+            // Define new user to ad to DB
+            const newUser = new User(
+                {_id: id, password: password, name: name, num_sets: 0,
+                email: email, isVerified: false});
     
-        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: id, password, name, email)";
-        res.status(400).json({ error:error });
-        return;
-    }
+            // Add document to users collection
+            newUser.save(function (err, newUser)
+            {
+                if (err)
+                {
+                    error = err;
 
-    try
-    {
-        const db = client.db();
-        const result = db.collection('Users').insertOne(newUser);
-    }
-    catch(e)
-    {
-        error = e.toString();
-        res.status(500).json({ error:error });
-        return;
-    }
-
-    var ret = { error:error };
-    res.status(200).json(ret);
-    
-});
+                    // This code is for duplicate _id keys
+                    if (err.code == 11000)
+                    {
+                        res.status(401).json({ error: "That username is taken."});
+                        return;
+                    }
+                
+                    res.status(500).json({ error:error });
+                    return;
+                }
+                // Everything went fine
+                var ret = { error: error };
+                res.status(200).json(ret);
+            })
+        })
+    })
 
 module.exports = router;

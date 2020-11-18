@@ -34,7 +34,7 @@ router.post('/api/addSet', async (req, res, next) =>
         const result = db.collection('Sets').insertOne(newSet);
 
         // Add one from num_sets
-        const updateNumber = db.collection('Users').findOneAndUpdate(
+        const updateNumber = db.collection('users').findOneAndUpdate(
             { "_id":user_id},
             { $inc : { "num_sets" : 1 } }
             );

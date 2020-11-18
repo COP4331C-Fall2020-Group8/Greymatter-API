@@ -1,53 +1,76 @@
 var express = require('express');
 var router = express.Router();
-var app = express();
 
-var mongo = require('mongodb');
+var error = "";
+var errArray;
+
 const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
-//var assert = require('assert');
+const mongoose = require('mongoose');
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true});
 
-const client = mongo.MongoClient(url, {useUnifiedTopology: true});
-client.connect();
+const db = mongoose.connection;
 
-router.post('/api/login', async (req, res, next) =>
-{
-    // incoming: _id (username), password
-    // outgoing: firstName, lastName, error, message
+db.on('error', console.error.bind(console, 'connection:error: '));
 
-    const { id, password} = req.body;
-    
-    if (id == null || password == null)
+db.once('open', function()
     {
-    
-        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: id, password)";
-        res.status(400).json({ error:error });
-        return;
-    }
-    
-    // Add user info & initialize number of sets to 0 (new user)
-    const newUser = { _id:id, password:password };
-    var error = "";
+        const userSchema = new mongoose.Schema(
+            {
+                _id: String,
+                password: String,
+                name: Object,
+                num_sets: Number,
+                email: String,
+                isVerified: Boolean
+            });
 
-    const db = client.db();
-    const results = await db.collection("Users").find({ _id:id, password:password }).toArray();
+        console.log("Connection established.")
+        router.post('/api/login', async (req, res, next) =>
+        {
+            const { id, password } = req.body 
 
-    var fn = "";
-    var ln = "";
+            if (id == null || password == null)
+            {
+                error = "One or more needed fields doesn't exist. Review JSON input (Requires id, password)";
+                res.status(400).json({ error:error });
+                return;
+            }
+            
+            const User = mongoose.model('Users', userSchema);
 
+            function retrieveUserLogin(uname, pword, callback)
+            {
+                User.find({ _id:uname, password:pword }, function(err, users)
+                {
+                    if (err)
+                    {
+                        callback(err, null);
+                    }
+                    else
+                    {
+                        callback(null, users[0]);
+                    }
+                })
+            }
 
-    if ( results.length > 0)
-    {
-        fn = results[0].name.first;
-        ln = results[0].name.last;
-    }
-    else
-    {
-        error = "Invalid username/password.";
-        res.status(400).json(ret);
-    }
+            retrieveUserLogin(id, password, function(err, user)
+            {
+                if (err)
+                {
+                    console.log(err);
+                }
 
-    var ret = { firstName:fn, lastName:ln, error:'', message:"Welcome back, " + fn};
-    res.status(200).json(ret);    
-});
+                if (user == undefined)
+                {
+                    res.status(400).json({ error: "Invalid username/password."});
+                    return;
+                }
+
+                var message = "Welcome back, " + user.name.first + "!";
+                console.log(message);
+                res.status(200).json({ message:message });
+            });            
+        })
+    })
 
 module.exports = router;
