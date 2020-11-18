@@ -14,17 +14,6 @@ db.on('error', console.error.bind(console, 'connection:error: '));
 
 db.once('open', function()
     {
-        const userSchema = new mongoose.Schema(
-            {
-                _id: String,
-                password: String,
-                name: Object,
-                num_sets: Number,
-                email: String,
-                isVerified: Boolean
-            });
-
-        console.log("Connection established.")
         router.post('/api/register', async (req, res, next) =>
         {
             const { id, password, name, email } = req.body 
@@ -36,7 +25,7 @@ db.once('open', function()
                 return;
             }
             
-            const User = mongoose.model('Users', userSchema);
+            const User = mongoose.model('Users');
             
             // Define new user to ad to DB
             const newUser = new User(

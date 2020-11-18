@@ -15,6 +15,8 @@ var removeSetRouter = require('./routes/removeSet');
 var searchCardRouter = require('./routes/searchCard');
 var searchSetRouter = require('./routes/searchSet');
 
+var initRouter = require('./routes/init');
+
 var app = express();
 
 // view engine setup
@@ -37,6 +39,7 @@ app.use('/', removeCardRouter);
 app.use('/', removeSetRouter);
 app.use('/', searchCardRouter);
 app.use('/', searchSetRouter);
+app.use('/', initRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
