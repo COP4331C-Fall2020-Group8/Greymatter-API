@@ -7,10 +7,9 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true});
 
 const db = mongoose.connection;
 
-var User;
-
 db.on('error', console.error.bind(console, 'connection:error: '));
 
+// Intitialize schema for future use.
 db.once('open', function()
 {
     console.log("Connection established. Initializing schema...")
@@ -24,7 +23,7 @@ db.once('open', function()
             isVerified: Boolean
         });
     
-    User = mongoose.model('Users', userSchema);
+    mongoose.model('Users', userSchema);
 
     console.log("Initialization complete.");
 })

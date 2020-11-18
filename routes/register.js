@@ -14,10 +14,13 @@ db.on('error', console.error.bind(console, 'connection:error: '));
 
 db.once('open', function()
     {
+        // POST request only
         router.post('/api/register', async (req, res, next) =>
         {
+            // Needed values
             const { id, password, name, email } = req.body 
 
+            // Checks if payload is missing fields.
             if (id == null || password == null || name == null || email == null)
             {
                 error = "One or more needed fields doesn't exist. Review JSON input (Requires id, password, name, email)";
@@ -25,6 +28,7 @@ db.once('open', function()
                 return;
             }
             
+            // Retrieve schema defined in init.js
             const User = mongoose.model('Users');
             
             // Define new user to ad to DB

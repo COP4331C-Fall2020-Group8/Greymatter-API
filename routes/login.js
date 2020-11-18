@@ -14,10 +14,13 @@ db.on('error', console.error.bind(console, 'connection:error: '));
 
 db.once('open', function()
     {
+        // POST request
         router.post('/api/login', async (req, res, next) =>
         {
+            // Needed values
             const { id, password } = req.body 
 
+            // Checks if payload is missing fields.
             if (id == null || password == null)
             {
                 error = "One or more needed fields doesn't exist. Review JSON input (Requires id, password)";
@@ -25,8 +28,10 @@ db.once('open', function()
                 return;
             }
             
+            // Retrieve schema defined in init.js
             const User = mongoose.model('Users');
 
+            // Function to get login results
             function retrieveUserLogin(uname, pword, callback)
             {
                 User.find({ _id:uname, password:pword }, function(err, users)
@@ -42,6 +47,7 @@ db.once('open', function()
                 })
             }
 
+            // Get login results
             retrieveUserLogin(id, password, function(err, user)
             {
                 if (err)
@@ -49,12 +55,14 @@ db.once('open', function()
                     console.log(err);
                 }
 
+                // No username & pasword found
                 if (user == undefined)
                 {
                     res.status(400).json({ error: "Invalid username/password."});
                     return;
                 }
 
+                // Successful login
                 var message = "Welcome back, " + user.name.first + "!";
                 console.log(message);
                 res.status(200).json({ message:message });
