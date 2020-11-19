@@ -18,12 +18,12 @@ db.once('open', function()
         router.post('/api/getSetID', async (req, res, next) =>
         {
             // Needed values
-            const { id, name } = req.body 
+            const { user_id, name } = req.body 
 
             // Checks if payload is missing fields.
-            if (id == null || name == null)
+            if (user_id == null || name == null)
             {
-                error = "One or more needed fields doesn't exist. Review JSON input (Requires id, name)";
+                error = "One or more needed fields doesn't exist. Review JSON input (Requires user_id, name)";
                 res.status(400).json({ error:error });
                 return;
             }
@@ -48,7 +48,7 @@ db.once('open', function()
             }
 
             // Get login results
-            retrieveSetID(id, name, function(err, set)
+            retrieveSetID(user_id, name, function(err, set)
             {
                 if (err)
                 {
