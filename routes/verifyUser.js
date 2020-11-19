@@ -50,7 +50,7 @@ db.once('open', function()
 
             if (user == undefined)
             {
-                res.status(400).json({ error: "That user doesn't exist."});
+                res.status(401).json({ error: "That user doesn't exist."});
                 return;
             }
 
