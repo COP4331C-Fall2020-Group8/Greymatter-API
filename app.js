@@ -14,6 +14,8 @@ var addSetRouter = require('./routes/addSet');
 var removeSetRouter = require('./routes/removeSet');
 var searchCardRouter = require('./routes/searchCard');
 var searchSetRouter = require('./routes/searchSet');
+var updateCardRouter = require('./routes/updateCard');
+var updateSetRouter = require('./routes/updateSet');
 var verifyUserRouter = require('./routes/verifyUser');
 var getSetIDRouter = require('./routes/getSetID');
 
@@ -41,6 +43,8 @@ app.use('/', removeCardRouter);
 app.use('/', removeSetRouter);
 app.use('/', searchCardRouter);
 app.use('/', searchSetRouter);
+app.use('/', updateCardRouter);
+app.use('/', updateSetRouter);
 app.use('/', initRouter);
 app.use('/', verifyUserRouter);
 app.use('/', getSetIDRouter);
