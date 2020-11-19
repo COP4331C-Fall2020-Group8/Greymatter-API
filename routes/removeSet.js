@@ -42,7 +42,7 @@ router.post('/api/removeSet', async (req, res, next) =>
         // If no matching ID was found
         if (user_id.length == 0)
         {
-            res.status(400).json( {error:"This record doesn't exist. (Invalid ID)"})
+            res.status(401).json( {error:"This record doesn't exist. (Invalid ID)"})
             return;
         }
 
