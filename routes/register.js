@@ -18,7 +18,7 @@ db.once('open', function()
         router.post('/api/register', async (req, res, next) =>
         {
             // Needed values
-            const { id, password, name, email } = req.body 
+            const { id, password, name, email } = req.body
 
             // Checks if payload is missing fields.
             if (id == null || password == null || name == null || email == null)
@@ -27,15 +27,15 @@ db.once('open', function()
                 res.status(400).json({ error:error });
                 return;
             }
-            
+
             // Retrieve schema defined in init.js
             const User = mongoose.model('Users');
-            
+
             // Define new user to ad to DB
             const newUser = new User(
                 {_id: id, password: password, name: name, num_sets: 0,
                 email: email, isVerified: false});
-    
+
             // Add document to users collection
             newUser.save(function (err, newUser)
             {
@@ -49,11 +49,12 @@ db.once('open', function()
                         res.status(401).json({ error: "That username is taken."});
                         return;
                     }
-                
+
                     res.status(500).json({ error:error });
                     return;
                 }
                 // Everything went fine
+				error = "";
                 var ret = { error: error };
                 res.status(200).json(ret);
             })
