@@ -14,6 +14,7 @@ var addSetRouter = require('./routes/addSet');
 var removeSetRouter = require('./routes/removeSet');
 var searchCardRouter = require('./routes/searchCard');
 var searchSetRouter = require('./routes/searchSet');
+var verifyUserRouter = require('./routes/verifyUser');
 
 var initRouter = require('./routes/init');
 
@@ -40,6 +41,7 @@ app.use('/', removeSetRouter);
 app.use('/', searchCardRouter);
 app.use('/', searchSetRouter);
 app.use('/', initRouter);
+app.use('/', verifyUserRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
