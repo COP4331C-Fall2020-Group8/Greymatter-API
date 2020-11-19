@@ -18,7 +18,7 @@ db.once('open', function()
         router.post('/api/login', async (req, res, next) =>
         {
             // Needed values
-            const { id, password } = req.body 
+            const { id, password } = req.body
 
             // Checks if payload is missing fields.
             if (id == null || password == null)
@@ -27,7 +27,7 @@ db.once('open', function()
                 res.status(400).json({ error:error });
                 return;
             }
-            
+
             // Retrieve schema defined in init.js
             const User = mongoose.model('Users');
 
@@ -62,11 +62,17 @@ db.once('open', function()
                     return;
                 }
 
+				if (!user.isVerified)
+				{
+					res.status(401).send({ type: 'not-verified', msg: 'Your account has not been verified.' });
+					return;
+				}
+
                 // Successful login
                 var message = "Welcome back, " + user.name.first + "!";
                 console.log(message);
                 res.status(200).json({ message:message });
-            });            
+            });
         })
     })
 

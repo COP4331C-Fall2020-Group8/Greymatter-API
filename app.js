@@ -20,6 +20,7 @@ var verifyUserRouter = require('./routes/verifyUser');
 var getSetIDRouter = require('./routes/getSetID');
 
 var initRouter = require('./routes/init');
+var confirmationRouter = require('./routes/confirmation');
 
 var app = express();
 
@@ -46,8 +47,8 @@ app.use('/', searchSetRouter);
 app.use('/', updateCardRouter);
 app.use('/', updateSetRouter);
 app.use('/', initRouter);
-app.use('/', verifyUserRouter);
 app.use('/', getSetIDRouter);
+app.use('/', confirmationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

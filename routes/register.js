@@ -1,6 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
+var sgTransport = require('nodemailer-sendgrid-transport');
+
 var error = "";
 var errArray;
 
@@ -12,11 +16,18 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection:error: '));
 
+var options = {
+	auth: {
+		api_key: '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'
+	}
+}
+
 db.once('open', function()
     {
         // POST request only
         router.post('/api/register', async (req, res, next) =>
         {
+			error = "";
             // Needed values
             const { id, password, name, email } = req.body
 
@@ -30,6 +41,7 @@ db.once('open', function()
 
             // Retrieve schema defined in init.js
             const User = mongoose.model('Users');
+			const Token = mongoose.model('Tokens');
 
             // Define new user to ad to DB
             const newUser = new User(
@@ -53,10 +65,20 @@ db.once('open', function()
                     res.status(500).json({ error:error });
                     return;
                 }
-                // Everything went fine
-				error = "";
-                var ret = { error: error };
-                res.status(200).json(ret);
+
+				var token = new Token({ _userId: newUser._id, token: crypto.randomBytes(16).toString('hex') });
+
+				token.save(function (err)
+				{
+					if (err) { return res.status(500).send({ msg: err.message }); }
+
+					var transporter = nodemailer.createTransport(sgTransport(options));
+					var mailOptions = { from: 'group8project8@gmail.com', to: newUser.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '\n' };
+					transporter.sendMail(mailOptions, function (err) {
+						if (err) { return res.status(500).send({ msg: err.message }); }
+                		res.status(200).json({msg: 'A verification email has been sent to ' + newUser.email + '.'});
+					});
+				});
             })
         })
     })

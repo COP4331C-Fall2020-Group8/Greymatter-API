@@ -23,7 +23,7 @@ db.once('open', function()
             email: String,
             isVerified: Boolean
         });
-    
+
     mongoose.model('Users', userSchema);
 
     const setSchema = new mongoose.Schema(
@@ -36,6 +36,26 @@ db.once('open', function()
         });
 
     mongoose.model('Sets', setSchema);
+
+	const tokenSchema = new mongoose.Schema(
+		{
+			_userId: {
+				type: String,
+				required: true
+			},
+			token: {
+				type: String,
+				required: true
+			},
+			createdAt: {
+				type: Date,
+				required: true,
+				default: Date.now,
+				expires: 43200
+			}
+		});
+
+	mongoose.model('Tokens', tokenSchema);
 
     console.log("Initialization complete.");
 })
