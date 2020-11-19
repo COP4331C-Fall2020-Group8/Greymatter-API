@@ -34,7 +34,7 @@ router.post('/api/addCard', async (req, res, next) =>
         const db = client.db();
         
         // Find results
-        var tmp = await db.collection("Sets").find(
+        var tmp = await db.collection("sets").find(
         {"_id":mongo.ObjectID(set_id)}
         ).forEach(function(row)
         {
@@ -48,12 +48,12 @@ router.post('/api/addCard', async (req, res, next) =>
             return;
         }
         
-        const updateNumber = db.collection('Sets').findOneAndUpdate(
+        const updateNumber = db.collection('sets').findOneAndUpdate(
             { "_id":mongo.ObjectID(set_id)},
             { $inc : { "num_cards" : 1 } }
             );
         
-        const result = db.collection('Cards').insertOne(newCard);
+        const result = db.collection('cards').insertOne(newCard);
 
 
 

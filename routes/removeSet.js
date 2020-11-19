@@ -15,14 +15,14 @@ router.post('/api/removeSet', async (req, res, next) =>
     // incoming: _id (The Set's ID)
     // outgoing: error
 
-    const { _id } = req.body;
+    const { id } = req.body;
 
     var error = "";
     var user_id = [];
 
-    if (_id == null)
+    if (id == null)
     {
-        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: _id)";
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: id)";
         res.status(400).json({ error:error });
         return;
     }
@@ -32,8 +32,8 @@ router.post('/api/removeSet', async (req, res, next) =>
         const db = client.db();
         
         // Find results
-        var tmp = await db.collection("Sets").find(
-            {"_id":mongo.ObjectID(_id)}
+        var tmp = await db.collection("sets").find(
+            {"_id":mongo.ObjectID(id)}
         ).forEach(function(row)
         {
             user_id.push(row.user_id);
@@ -47,7 +47,7 @@ router.post('/api/removeSet', async (req, res, next) =>
         }
 
         // Remove document
-        const result = db.collection('Sets').deleteOne({_id:mongo.ObjectID(_id)}, function(err, result)
+        const result = db.collection('sets').deleteOne({_id:mongo.ObjectID(id)}, function(err, result)
         {
             if (err != null)
                 error = err;

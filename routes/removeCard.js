@@ -11,21 +11,28 @@ client.connect();
 
 router.post('/api/removeCard', async (req, res, next) =>
 {
-    // incoming: _id (The Card's ID)
+    // incoming: id (The Card's ID)
     // outgoing: error
 
-    const { _id } = req.body;
+    const { id } = req.body;
 
     var error = "";
     var set_id = [];
+
+    if (id == null)
+    {
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: id)";
+        res.status(400).json({ error:error });
+        return;
+    }
 
     try
     {
         const db = client.db();
 
         // Find results
-        var tmp = await db.collection("Cards").find(
-            {"_id":mongo.ObjectID(_id)}
+        var tmp = await db.collection("cards").find(
+            {"_id":mongo.ObjectID(id)}
         ).forEach(function(row)
         {
             console.log(row.set_id)
@@ -39,14 +46,14 @@ router.post('/api/removeCard', async (req, res, next) =>
             return;
         }
 
-        const result = db.collection('Cards').deleteOne({_id:mongo.ObjectID(_id)}, function(err, result)
+        const result = db.collection('cards').deleteOne({_id:mongo.ObjectID(id)}, function(err, result)
         {
             if (err != null)
                 error = err;
         });
 
         // Remove one from num_sets
-        const updateNumber = db.collection('Sets').findOneAndUpdate(
+        const updateNumber = db.collection('sets').findOneAndUpdate(
             { "_id":mongo.ObjectID(set_id[0])},
             { $inc : { "num_cards" : -1 } }
             );

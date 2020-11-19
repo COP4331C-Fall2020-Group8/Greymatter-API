@@ -30,7 +30,7 @@ router.post('/api/updateSet', async (req, res, next) =>
     const options = { multi: true };
     try {
         const db = client.db();
-        const results = await db.collection('Sets').updateOne(query, replacement, options);
+        const results = await db.collection('sets').updateOne(query, replacement, options);
 
         /*if (results == null) { 
             error = "Unable to find Set";

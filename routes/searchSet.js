@@ -20,7 +20,7 @@ router.post('/api/searchSet', async (req, res, next) => {
     //var _search = search.trim();
     try {
         const db = client.db();
-        const results = await db.collection('Sets').find({ user_id: user_id }).toArray();
+        const results = await db.collection('sets').find({ user_id: user_id }).toArray();
         /*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
         if (results.length == 0) {
             error = "No results from search.";

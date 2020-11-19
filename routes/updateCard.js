@@ -33,7 +33,7 @@ router.post('/api/updateCard', async (req, res, next) =>
     const options = { multi: true };
     try {
         const db = client.db();
-        const results = await db.collection('Cards').updateOne(query, replacement, options);
+        const results = await db.collection('cards').updateOne(query, replacement, options);
 
         /*if (results == null) { 
             error = "Unable to find Set";

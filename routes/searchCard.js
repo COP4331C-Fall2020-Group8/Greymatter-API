@@ -24,7 +24,7 @@ router.post('/api/searchCard', async (req, res, next) =>
     var status;
     try {
         const db = client.db();
-        const results = await db.collection('Cards').find({ set_id: set_id/*user_id : user_id*/ }).toArray();
+        const results = await db.collection('cards').find({ set_id: set_id/*user_id : user_id*/ }).toArray();
         /*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
         if (results.length == 0) {
             error = "No results from search.";
