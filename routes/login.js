@@ -58,7 +58,7 @@ db.once('open', function()
                 // No username & pasword found
                 if (user == undefined)
                 {
-                    res.status(400).json({ error: "Invalid username/password."});
+                    res.status(401).json({ error: "Invalid username/password."});
                     return;
                 }
 
