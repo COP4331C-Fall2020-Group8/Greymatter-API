@@ -16,7 +16,6 @@ var searchCardRouter = require('./routes/searchCard');
 var searchSetRouter = require('./routes/searchSet');
 var updateCardRouter = require('./routes/updateCard');
 var updateSetRouter = require('./routes/updateSet');
-var verifyUserRouter = require('./routes/verifyUser');
 var getSetIDRouter = require('./routes/getSetID');
 
 var initRouter = require('./routes/init');
