@@ -24,7 +24,7 @@ router.post('/api/searchSet', async (req, res, next) => {
         /*, name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})*/
         if (results.length == 0) {
             error = "No results from search.";
-            status = 400;
+            status = 200;
         }
         else { status = 200; }
         var _ret = [];
