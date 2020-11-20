@@ -18,7 +18,7 @@ db.on('error', console.error.bind(console, 'connection:error: '));
 
 var options = {
 	auth: {
-		api_key: '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'
+		api_key: process.env.SENDGRID_API_KEY
 	}
 }
 
