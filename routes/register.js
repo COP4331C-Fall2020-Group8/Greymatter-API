@@ -73,7 +73,7 @@ db.once('open', function()
 					if (err) { return res.status(500).send({ msg: err.message }); }
 
 					var transporter = nodemailer.createTransport(sgTransport(options));
-					var mailOptions = { from: 'group8project8@gmail.com', to: newUser.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '\n' };
+					var mailOptions = { from: 'noreplygreymatter@gmail.com', to: newUser.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '\n' };
 					transporter.sendMail(mailOptions, function (err) {
 						if (err) { return res.status(500).send({ msg: err.message }); }
                 		res.status(200).json({msg: 'A verification email has been sent to ' + newUser.email + '.'});
