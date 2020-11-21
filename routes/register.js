@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 
 var crypto = require('crypto');
-var nodemailer = require('nodemailer');
-var sgTransport = require('nodemailer-sendgrid-transport');
+
+var sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 var error = "";
 var errArray;
@@ -15,12 +16,6 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection:error: '));
-
-var options = {
-	auth: {
-		api_key: process.env.SENDGRID_API_KEY
-	}
-}
 
 db.once('open', function()
     {
@@ -72,12 +67,22 @@ db.once('open', function()
 				{
 					if (err) { return res.status(500).send({ msg: err.message }); }
 
-					var transporter = nodemailer.createTransport(sgTransport(options));
-					var mailOptions = { from: 'noreplygreymatter@gmail.com', to: newUser.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '\n' };
-					transporter.sendMail(mailOptions, function (err) {
-						if (err) { return res.status(500).send({ msg: err.message }); }
-                		res.status(200).json({msg: 'A verification email has been sent to ' + newUser.email + '.'});
-					});
+					var message = {
+						to: newUser.email,
+						from: 'noreplygreymatter@gmail.com',
+						subject: 'Verify your Grey Matter account',
+						text: 'Hello, \n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '\n'
+					};
+
+
+					sgMail
+						.send(message)
+						.then(() => {
+							res.status(200).json({ msg: 'A verification email has been sent to ' + newUser.email + '.' });
+						})
+						.catch((error) => {
+							return res.status(500).send({ msg: error.message });
+						})
 				});
             })
         })
