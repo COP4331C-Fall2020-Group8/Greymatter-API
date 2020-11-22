@@ -19,6 +19,7 @@ var updateCardRouter = require('./routes/updateCard');
 var updateSetRouter = require('./routes/updateSet');
 var getSetIDRouter = require('./routes/getSetID');
 var forgotPasswordRouter = require('./routes/forgotPassword');
+var resetPasswordRouter = require('./routes/resetPassword');
 
 var initRouter = require('./routes/init');
 var confirmationRouter = require('./routes/confirmation');
@@ -52,6 +53,7 @@ app.use('/', initRouter);
 app.use('/', getSetIDRouter);
 app.use('/', confirmationRouter);
 app.use('/', forgotPasswordRouter);
+app.use('/', resetPasswordRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
