@@ -2,9 +2,6 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 
-var cors = require('cors');
-app.use(cors());
-
 var mongo = require('mongodb');
 const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
 //var assert = require('assert');

@@ -2,9 +2,6 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 
-var cors = require('cors');
-app.use(cors());
-
 var mongo = require('mongodb');
 const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
 //var assert = require('assert');
@@ -35,7 +32,7 @@ router.post('/api/addCard', async (req, res, next) =>
     try
     {
         const db = client.db();
-
+        
         // Find results
         var tmp = await db.collection("sets").find(
         {"_id":mongo.ObjectID(set_id)}
@@ -43,19 +40,19 @@ router.post('/api/addCard', async (req, res, next) =>
         {
             search.push(row.user_id);
         })
-
+            
         // If no matching ID was found
         if (search.length == 0)
         {
             res.status(400).json( {error:"There is no such Set ID. (Invalid ID)"})
             return;
         }
-
+        
         const updateNumber = db.collection('sets').findOneAndUpdate(
             { "_id":mongo.ObjectID(set_id)},
             { $inc : { "num_cards" : 1 } }
             );
-
+        
         const result = db.collection('cards').insertOne(newCard);
 
 
@@ -70,7 +67,7 @@ router.post('/api/addCard', async (req, res, next) =>
 
     var ret = { error:error };
     res.status(200).json(ret);
-
+    
 });
 
 module.exports = router;

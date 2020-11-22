@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var cors = require('cors');
-app.use(cors());
-
 const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true});

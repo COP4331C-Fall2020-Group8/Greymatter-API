@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var cors = require('cors');
-app.use(cors());
-
 var error = "";
 var errArray;
 
@@ -21,7 +18,7 @@ db.once('open', function()
         router.post('/api/getSetID', async (req, res, next) =>
         {
             // Needed values
-            const { user_id, name } = req.body
+            const { user_id, name } = req.body 
 
             // Checks if payload is missing fields.
             if (user_id == null || name == null)
@@ -30,7 +27,7 @@ db.once('open', function()
                 res.status(400).json({ error:error });
                 return;
             }
-
+            
             // Retrieve schema defined in init.js
             const User = mongoose.model('Sets');
 
@@ -68,7 +65,7 @@ db.once('open', function()
                 // Successful login
                 var setid = set._id;
                 res.status(200).json({ set_id:setid });
-            });
+            });            
         })
     })
 

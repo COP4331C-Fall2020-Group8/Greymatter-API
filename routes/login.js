@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var cors = require('cors');
-app.use(cors());
-
 var error = "";
 var errArray;
 

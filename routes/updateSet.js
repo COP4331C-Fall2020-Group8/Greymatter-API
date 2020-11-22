@@ -2,9 +2,6 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 
-var cors = require('cors');
-app.use(cors());
-
 var mongo = require('mongodb');
 const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
 //var assert = require('assert');
@@ -35,17 +32,17 @@ router.post('/api/updateSet', async (req, res, next) =>
         const db = client.db();
         const results = await db.collection('sets').updateOne(query, replacement, options);
 
-        /*if (results == null) {
+        /*if (results == null) { 
             error = "Unable to find Set";
         }
         error = results;
         , name: { $regex: '.*' + search + '.*' }, category: { $regex: '.*' + search + '.*' } }, {projection: {user_id:1 , name:1, category:1}})
-        if (results.length == 0) {
+        if (results.length == 0) { 
             error = "No results from search.";
         }
 
         var _ret = [];
-        for (var i = 0; i < results.length; i++) {
+        for (var i = 0; i < results.length; i++) { 
             var cardfront = results[i].card.front.toLowerCase();
             var cardback = results[i].card.back.toLowerCase();
             if(cardfront.includes(search.toLowerCase()) || cardback.includes(search.toLowerCase()))
