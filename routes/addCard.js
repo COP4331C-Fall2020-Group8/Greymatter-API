@@ -24,7 +24,8 @@ router.post('/api/addCard', async (req, res, next) =>
 
     if (user_id == null || set_id == null || card == null)
     {
-        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: user_id, set_id, card)";
+        //  (Requires: user_id, set_id, card)
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables.";
         res.status(400).json({ error:error });
         return;
     }
@@ -44,7 +45,7 @@ router.post('/api/addCard', async (req, res, next) =>
         // If no matching ID was found
         if (search.length == 0)
         {
-            res.status(400).json( {error:"There is no such Set ID. (Invalid ID)"})
+            res.status(401).json( {error:"There is no such Set ID. (Invalid ID)"})
             return;
         }
         
@@ -60,8 +61,8 @@ router.post('/api/addCard', async (req, res, next) =>
     }
     catch(e)
     {
-        error = e.toString();
-        res.status(500).json( {error:error});
+        error = e.getMessage();
+        res.status(500).json( {error:error} );
         return;
     }
 

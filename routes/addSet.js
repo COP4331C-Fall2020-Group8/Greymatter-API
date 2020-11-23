@@ -19,7 +19,8 @@ router.post('/api/addSet', async (req, res, next) =>
     var error = "";
     if (user_id == null || name == null || category == null)
     {
-        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables. (Requires: user_id, name, category)";
+        // (Requires: user_id, name, category)
+        error = "One or more needed fields are null. Check that your JSON Payload has the correct variables.";
         res.status(400).json({ error:error });
         return;
     }
@@ -42,7 +43,7 @@ router.post('/api/addSet', async (req, res, next) =>
     }
     catch(e)
     {
-        error = e.toString();
+        error = e.getMessage();
         res.status(500).json( {error:error} );
         return;
     }
