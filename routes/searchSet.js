@@ -17,7 +17,7 @@ router.post('/api/searchSet', async (req, res, next) => {
     var status;
     const { user_id, search } = req.body;
     
-     if(search == null){
+     if(!search){
         res.status(200).json({error: error});
         return;
     }
