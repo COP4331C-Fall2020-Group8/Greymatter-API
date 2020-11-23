@@ -16,7 +16,11 @@ router.post('/api/searchSet', async (req, res, next) => {
     var error = "";
     var status;
     const { user_id, search } = req.body;
-
+    
+     if(search == null){
+        res.status(200).json({error: error});
+        return;
+    }
     //var _search = search.trim();
     try {
         const db = client.db();
