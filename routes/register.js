@@ -34,6 +34,15 @@ db.once('open', function()
                 return;
             }
 
+			// Validate email
+			const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			if (!re.test(email))
+			{
+				error = "Email address is not valid. Please try again with a valid email address.";
+				res.status(402).json({ error:error });
+				return;
+			}
+
             // Retrieve schema defined in init.js
             const User = mongoose.model('Users');
 			const Token = mongoose.model('Tokens');
