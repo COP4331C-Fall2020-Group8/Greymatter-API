@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -17,6 +18,8 @@ var searchSetRouter = require('./routes/searchSet');
 var updateCardRouter = require('./routes/updateCard');
 var updateSetRouter = require('./routes/updateSet');
 var getSetIDRouter = require('./routes/getSetID');
+var forgotPasswordRouter = require('./routes/forgotPassword');
+var resetPasswordRouter = require('./routes/resetPassword');
 
 var initRouter = require('./routes/init');
 var confirmationRouter = require('./routes/confirmation');
@@ -32,6 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -48,6 +52,8 @@ app.use('/', updateSetRouter);
 app.use('/', initRouter);
 app.use('/', getSetIDRouter);
 app.use('/', confirmationRouter);
+app.use('/', forgotPasswordRouter);
+app.use('/', resetPasswordRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

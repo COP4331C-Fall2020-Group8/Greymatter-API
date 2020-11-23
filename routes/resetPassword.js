@@ -11,7 +11,7 @@ db.on('error', console.error.bind(console, 'connection:error: '));
 
 db.once('open', function()
 {
-	router.get('/confirmation/:token', async (req, res) => {
+	router.get('/api/resetPassword', async (req, res) => {
 		/*
 		req.assert('email', 'Email is not valid').isEmail();
 		req.assert('email', 'Email cannot be blank').notEmpty();
@@ -25,6 +25,8 @@ db.once('open', function()
 		if (errors) return res.status(400).send(errors);
 		*/
 
+		const { id, password, token } = req.body;
+
 		const Token = mongoose.model('Tokens');
 		const User = mongoose.model('Users');
 
@@ -36,13 +38,12 @@ db.once('open', function()
 			// If we found a token, find a matching user
 			User.findOne({ _id: token._userId }, function (err, user) {
 				if (!user) return res.status(400).send({ msg: 'We were unable to find a user for this token.' });
-				if (user.isVerified) return res.status(400).send({ type: 'already-verified', msg: 'This user has already been verified.' });
 
 				// Verify and save the user
-				user.isVerified = true;
+				user.password = password;
 				user.save(function (err) {
 					if (err) { return res.status(500).send({ msg: err.message }); }
-					res.status(200).send("The account has been verified. Please <a href=\"http://grey-matter.netlify.app\">log in.</a>");
+					res.status(200).send("Your password has been updated. Please log in.");
 				});
 			});
 		});
