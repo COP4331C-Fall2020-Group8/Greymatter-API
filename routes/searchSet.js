@@ -17,10 +17,6 @@ router.post('/api/searchSet', async (req, res, next) => {
     var status;
     const { user_id, search } = req.body;
     
-     if(!search){
-        res.status(200).json({error: error});
-        return;
-    }
     //var _search = search.trim();
     try {
         const db = client.db();
@@ -29,6 +25,15 @@ router.post('/api/searchSet', async (req, res, next) => {
         if (results.length == 0) {
             error = "No results from search.";
             status = 200;
+        }
+        if(!search){
+            var _ret = [];
+            for(var i = 0; i < results.length; i++){
+                _ret.push(results[i]);
+            }
+            var ret = { results: _ret, error: error };
+            res.status(status).json(ret);
+            return;
         }
         else { status = 200; }
         var _ret = [];
