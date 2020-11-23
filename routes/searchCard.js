@@ -44,7 +44,7 @@ router.post('/api/searchCard', async (req, res, next) =>
     }
     catch (e) {
         error = e.toString();
-        res.status(500).json({ error: error })
+        res.status(500).json({ error: error });
         return;
     }
     var ret = { results: _ret, error: error };
