@@ -17,10 +17,17 @@ router.post('/api/addSet', async (req, res, next) =>
     const { user_id, name, category } = req.body;
     
     var error = "";
-    if (user_id == null || name == null || category == null)
+    if (user_id == null)
     {
         // (Requires: user_id, name, category)
         error = "One or more needed fields are null. Check that your JSON Payload has the correct variables.";
+        res.status(400).json({ error:error });
+        return;
+    }
+
+    if (category == null || name == null)
+    {
+        error = "No Topic added. Topic name and Category name cannot be left empty.";
         res.status(400).json({ error:error });
         return;
     }

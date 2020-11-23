@@ -22,10 +22,17 @@ router.post('/api/addCard', async (req, res, next) =>
     var error = "";
     var search = [];
 
-    if (user_id == null || set_id == null || card == null)
+    if (user_id == null || set_id == null)
     {
         //  (Requires: user_id, set_id, card)
         error = "One or more needed fields are null. Check that your JSON Payload has the correct variables.";
+        res.status(400).json({ error:error });
+        return;
+    }
+
+    if (card == null)
+    {
+        error = "No Card added. Question and Answer cannot be left empty.";
         res.status(400).json({ error:error });
         return;
     }
