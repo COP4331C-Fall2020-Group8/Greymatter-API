@@ -37,7 +37,7 @@ db.once('open', function()
 
 			// If we found a token, find a matching user
 			User.findOne({ _id: token._userId }, function (err, user) {
-				if (!user) return res.status(400).send({ msg: 'We were unable to find a user for this token.' });
+				if (!user) return res.status(401).send({ msg: 'We were unable to find a user for this token.' });
 
 				// Verify and save the user
 				user.password = password;
