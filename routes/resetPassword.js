@@ -11,7 +11,7 @@ db.on('error', console.error.bind(console, 'connection:error: '));
 
 db.once('open', function()
 {
-	router.get('/api/resetPassword', async (req, res) => {
+	router.post('/api/resetPassword', async (req, res) => {
 		/*
 		req.assert('email', 'Email is not valid').isEmail();
 		req.assert('email', 'Email cannot be blank').notEmpty();
