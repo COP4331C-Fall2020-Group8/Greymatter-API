@@ -42,7 +42,7 @@ db.once('open', function()
 						if (!user)
 						{
 							error = "No user found with that username";
-							res.status(400).json({ error:error });
+							res.status(401).json({ error:error });
 							return;
 						}
 
