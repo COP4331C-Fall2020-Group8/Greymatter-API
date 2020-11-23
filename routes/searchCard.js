@@ -24,7 +24,7 @@ router.post('/api/searchCard', async (req, res, next) =>
         return;
     }
     var _search = search.trim();
-    var status;
+    var status = 200;
     try {
         const db = client.db();
         const results = await db.collection('cards').find({ set_id: set_id/*user_id : user_id*/ }).toArray();
@@ -32,6 +32,10 @@ router.post('/api/searchCard', async (req, res, next) =>
         if (results.length == 0) {
             error = "No results from search.";
             status = 200;
+        }
+        if(search == ""){
+            var ret = { results: results, error: error };
+            res.status(status).json(ret);
         }
         else { status = 200; }
         var _ret = [];
