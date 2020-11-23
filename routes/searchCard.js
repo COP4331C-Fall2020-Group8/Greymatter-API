@@ -19,7 +19,7 @@ router.post('/api/searchCard', async (req, res, next) =>
     var error = "";
 
     const { set_id /*user_id*/ , search } = req.body;
-    if(search == null){
+    if(!search){
         res.status(200).json({error: error});
         return;
     }
