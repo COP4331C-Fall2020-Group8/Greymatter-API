@@ -42,7 +42,7 @@ db.once('open', function()
 				user.isVerified = true;
 				user.save(function (err) {
 					if (err) { return res.status(500).send({ msg: err.message }); }
-					res.status(200).send("The account has been verified. Please log in.");
+					res.status(200).send("The account has been verified. Please <a href=\"http://grey-matter.netlify.app\">log in.</a>");
 				});
 			});
 		});
