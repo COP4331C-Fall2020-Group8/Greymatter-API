@@ -64,7 +64,7 @@ db.once('open', function()
 
 				if (!user.isVerified)
 				{
-					res.status(402).send({ type: 'not-verified', msg: 'Your account has not been verified.' });
+					res.status(402).send({ error: 'Your account has not been verified.' });
 					return;
 				}
 
