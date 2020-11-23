@@ -47,10 +47,13 @@ db.once('open', function()
             const User = mongoose.model('Users');
 			const Token = mongoose.model('Tokens');
 
+			const salt = crypto.randomBytes(16).toString('hex');
+			const hashedPassword = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+
             // Define new user to ad to DB
             const newUser = new User(
-                {_id: id, password: password, name: name, num_sets: 0,
-                email: email, isVerified: false});
+                {_id: id, password: hashedPassword, name: name, num_sets: 0,
+					email: email, isVerified: false, salt: salt});
 
             // Add document to users collection
             newUser.save(function (err, newUser)

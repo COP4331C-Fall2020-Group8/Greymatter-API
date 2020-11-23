@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var crypto = require('crypto');
+
 var error = "";
 var errArray;
 
@@ -32,9 +34,9 @@ db.once('open', function()
             const User = mongoose.model('Users');
 
             // Function to get login results
-            function retrieveUserLogin(uname, pword, callback)
+            function retrieveUserLogin(uname, callback)
             {
-                User.find({ _id:uname, password:pword }, function(err, users)
+                User.find({ _id:uname }, function(err, users)
                 {
                     if (err)
                     {
@@ -48,15 +50,17 @@ db.once('open', function()
             }
 
             // Get login results
-            retrieveUserLogin(id, password, function(err, user)
+            retrieveUserLogin(id, function(err, user)
             {
                 if (err)
                 {
                     console.log(err);
                 }
 
+				var hash = crypto.pbkdf2Sync(password, user.salt, 1000, 64, 'sha512').toString('hex');
+
                 // No username & pasword found
-                if (user == undefined)
+                if (user == undefined || hash !== user.password)
                 {
                     res.status(401).json({ error: "Invalid username/password."});
                     return;

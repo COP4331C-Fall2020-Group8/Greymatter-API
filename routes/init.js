@@ -21,7 +21,8 @@ db.once('open', function()
             name: Object,
             num_sets: Number,
             email: String,
-            isVerified: Boolean
+            isVerified: Boolean,
+			salt: String
         });
 
     mongoose.model('Users', userSchema);

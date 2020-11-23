@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var crypto = require('crypto');
+
 const url = process.env.MONGO_URI;
 const mongoose = require('mongoose');
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true});
@@ -40,7 +42,9 @@ db.once('open', function()
 				if (!user) return res.status(401).send({ msg: 'We were unable to find a user for this token.' });
 
 				// Verify and save the user
-				user.password = password;
+				const salt = crypto.randomBytes(16).toString('hex');
+				const hashedPassword = crypto.pbkdf2Sync(password, user.salt, 1000, 64, 'sha512').toString('hex');
+				user.password = hashedPassword;
 				user.save(function (err) {
 					if (err) { return res.status(500).send({ msg: err.message }); }
 					res.status(200).send("Your password has been updated. Please log in.");
