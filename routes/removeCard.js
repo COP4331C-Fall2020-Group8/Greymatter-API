@@ -3,7 +3,7 @@ var router = express.Router();
 var app = express();
 
 var mongo = require('mongodb');
-const url = 'mongodb+srv://greymatterDB:BGRjw7aR8kfAQq0T@greymatter.we1hx.mongodb.net/GreyMatter?retryWrites=true&w=majority';
+const url = process.env.MONGO_URI;
 //var assert = require('assert');
 
 const client = mongo.MongoClient(url, {useUnifiedTopology: true});
@@ -67,7 +67,7 @@ router.post('/api/removeCard', async (req, res, next) =>
 
     var ret = { error:error };
     res.status(200).json(ret);
-    
+
 });
 
 module.exports = router;
