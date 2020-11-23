@@ -32,9 +32,9 @@ db.once('open', function()
 		const Token = mongoose.model('Tokens');
 		const User = mongoose.model('Users');
 
-		console.log(req.params.token);
+		console.log(token);
 		// Find a matching token
-		Token.findOne({ token: req.params.token }, function (err, token) {
+		Token.findOne({ token: token }, function (err, token) {
 			if (!token) return res.status(400).send({ type: 'not-verified', msg: 'We were unable to find a valid token. Your token my have expired.' });
 
 			// If we found a token, find a matching user
@@ -47,7 +47,7 @@ db.once('open', function()
 				user.password = hashedPassword;
 				user.save(function (err) {
 					if (err) { return res.status(500).send({ msg: err.message }); }
-					res.status(200).send("Your password has been updated. Please log in.");
+					res.status(200).send({ msg: "Your password has been updated. Please log in." });
 				});
 			});
 		});
