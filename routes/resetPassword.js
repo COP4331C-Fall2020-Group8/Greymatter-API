@@ -43,8 +43,9 @@ db.once('open', function()
 
 				// Verify and save the user
 				const salt = crypto.randomBytes(16).toString('hex');
-				const hashedPassword = crypto.pbkdf2Sync(password, user.salt, 1000, 64, 'sha512').toString('hex');
+				const hashedPassword = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
 				user.password = hashedPassword;
+				user.salt = salt;
 				user.save(function (err) {
 					if (err) { return res.status(500).send({ msg: err.message }); }
 					res.status(200).send({ msg: "Your password has been updated. Please log in." });
